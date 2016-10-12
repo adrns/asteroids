@@ -2,17 +2,13 @@
 
 namespace Asteroids.Model
 {
-    class Asteroid
+    class Asteroid : GameObject
     {
         private static Random random = new Random();
         private const double MIN_SECONDS_VISIBLE = 3.0;
         private const double MAX_SECONDS_VISIBLE = 7.0;
         private const double MIN_SIZE_RATIO = 10.0;
         private const double MAX_SIZE_RATIO = 5.0;
-        private double size;
-        private double velocity;
-        private double x;
-        private double y;
         
         public Asteroid(double fieldWidth, double fieldHeight, double maxY, double fps)
         {
@@ -36,6 +32,11 @@ namespace Asteroids.Model
             double maxVelocity = fieldHeight / fps / MAX_SECONDS_VISIBLE;
 
             return random.NextDouble() * maxVelocity + minVelocity;
+        }
+
+        public override void advance()
+        {
+            y += velocity;
         }
     }
 }
