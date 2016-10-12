@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Asteroids.Model
 {
-    class AsteroidsGame
+    class SpaceShip
     {
-        private int shipPosition;
     }
 }
