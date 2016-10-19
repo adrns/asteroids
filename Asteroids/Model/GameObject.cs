@@ -7,6 +7,10 @@
         protected double x;
         protected double y;
 
+        public double X { get { return x; } }
+        public double Y { get { return y; } }
+        public double Size { get { return size; } }
+
         abstract public void advance();
 
         public bool collidesWith(GameObject other)

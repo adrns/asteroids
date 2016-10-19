@@ -11,7 +11,7 @@ namespace Asteroids.Model
     class AsteroidsGame
     {
         private SpaceShip player;
-        private List<Asteroid> asteroids;
+        private List<Asteroid> asteroids = new List<Asteroid>(20);
         private Timer timer;
         private Random random = new Random();
 
@@ -22,6 +22,9 @@ namespace Asteroids.Model
         private bool pendingLeft = false;
         private bool pendingRight = false;
         private double chanceToSpawn;
+
+        public delegate void FrameUpdateHandler(object sender, FrameEventArgs e);
+        public event FrameUpdateHandler OnFrameUpdate;
 
         public AsteroidsGame(double width, double height, int fps)
         {
@@ -48,6 +51,7 @@ namespace Asteroids.Model
             spawnObjects();
             if (playerCollided())
                 gameOver();
+            OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size));
         }
 
         private void advanceObjects()
