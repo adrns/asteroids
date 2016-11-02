@@ -1,5 +1,4 @@
 ﻿using Asteroids.Model;
-
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -12,7 +11,7 @@ namespace Asteroids
         private Brush brush;
         private Font font;
         private AsteroidsGame game;
-        private int FPS = 24;
+        private int FPS = 120;
         private long counter = 0;
 
         private float playerX;
@@ -24,11 +23,11 @@ namespace Asteroids
             InitializeComponent();
             brush = new SolidBrush(Color.AliceBlue);
             font = new Font("Courier New", 18);
-            canvas.Paint += Canvas_Paint;
-            game = new AsteroidsGame(canvas.Width, canvas.Height, FPS);
+            game = new AsteroidsGame(Width, Height, FPS);
             game.OnFrameUpdate += new AsteroidsGame.FrameUpdateHandler(handler);
             game.start();
             KeyDown += GameForm_KeyDown;
+            Paint += Canvas_Paint;
         }
 
         private void GameForm_KeyDown(object sender, KeyEventArgs e)
@@ -47,7 +46,7 @@ namespace Asteroids
             playerY = (float) e.PlayerY;
             playerSize = (float) e.PlayerSize;
             counter++;
-            canvas.Invalidate();
+            Invalidate();
         }
 
         private void Canvas_Paint(object sender, PaintEventArgs e)
@@ -59,11 +58,14 @@ namespace Asteroids
             graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
             graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
 
-            //graphics.FillRectangle(brush, 0, 0, canvas.Width, canvas.Height);
             //graphics.DrawString("counter " + counter, font, Brushes.Black, playerX, playerY);
-            graphics.FillRectangle(Brushes.Black, playerX, playerY, playerSize, playerSize);
+            graphics.FillRectangle(Brushes.Red, playerX, playerY, playerSize, playerSize);
         }
 
+        protected override void OnPaintBackground(PaintEventArgs e)
+        {
+            //disable
+        }
 
     }
 }

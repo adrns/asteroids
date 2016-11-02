@@ -10,10 +10,10 @@ namespace Asteroids.Model
         private const double MIN_SIZE_RATIO = 10.0;
         private const double MAX_SIZE_RATIO = 5.0;
         
-        public Asteroid(double fieldWidth, double fieldHeight, double maxY, double fps)
+        public Asteroid(double fieldWidth, double fieldHeight, double maxY)
         {
             size = calculateSize(fieldWidth);
-            velocity = calculateVelocity(fieldHeight, fps);
+            velocity = calculateVelocity(fieldHeight);
             x = random.NextDouble() * (fieldWidth - size);
             y = random.NextDouble() * maxY + size;
         }
@@ -26,10 +26,10 @@ namespace Asteroids.Model
             return random.NextDouble() * maxSize + minSize;
         }
 
-        private double calculateVelocity(double fieldHeight, double fps)
+        private double calculateVelocity(double fieldHeight)
         {
-            double minVelocity = fieldHeight / fps / MIN_SECONDS_VISIBLE;
-            double maxVelocity = fieldHeight / fps / MAX_SECONDS_VISIBLE;
+            double minVelocity = fieldHeight / MIN_SECONDS_VISIBLE / AsteroidsGame.UpdateRate;
+            double maxVelocity = fieldHeight / MAX_SECONDS_VISIBLE / AsteroidsGame.UpdateRate;
 
             return random.NextDouble() * maxVelocity + minVelocity;
         }

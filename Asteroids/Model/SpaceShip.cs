@@ -8,7 +8,7 @@ namespace Asteroids.Model
         private double leftBoundary;
         private double rightBoundary;
 
-        public SpaceShip(double fieldWidth, double fieldHeight, double fps)
+        public SpaceShip(double fieldWidth, double fieldHeight)
         {
             size = fieldWidth / SIZE_RATIO;
             leftBoundary = 0 - size / 4;

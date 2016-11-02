@@ -28,23 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.canvas = new System.Windows.Forms.Panel();
             this.SuspendLayout();
-            // 
-            // canvas
-            // 
-            this.canvas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.canvas.Location = new System.Drawing.Point(0, 0);
-            this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(400, 600);
-            this.canvas.TabIndex = 0;
             // 
             // GameForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 600);
-            this.Controls.Add(this.canvas);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "GameForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -54,8 +45,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel canvas;
     }
 }
 

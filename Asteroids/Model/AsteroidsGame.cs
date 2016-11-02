@@ -1,23 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.Timers;
 using System;
+using System.Diagnostics;
 
 namespace Asteroids.Model
 {
-    //TODO count seconds
     //TODO spawn asteroids
     //TODO remove asteroids out of bounds
-    //TODO send events from game loop
     class AsteroidsGame
     {
+        private const int speedMs = 5;
+        public const int UpdateRate = 1000 / speedMs;
         private SpaceShip player;
         private List<Asteroid> asteroids = new List<Asteroid>(20);
         private Timer timer;
         private Random random = new Random();
+        private Stopwatch stopWatch;
 
         private double width;
         private double height;
         private int fps;
+        private int updateInterval;
+        private long lastUpdate;
         private bool isStarted = false;
         private bool pendingLeft = false;
         private bool pendingRight = false;
@@ -31,17 +35,21 @@ namespace Asteroids.Model
             this.width = width;
             this.height = height;
             this.fps = fps;
+            updateInterval = 1000 / fps;
         }
 
         public void start()
         {
             if (!isStarted)
             {
-                player = new SpaceShip(width, height, fps);
+                player = new SpaceShip(width, height);
                 isStarted = true;
-                timer = new Timer(1000.0 / fps);
+                timer = new Timer(speedMs);
                 timer.Elapsed += gameLoop;
                 timer.Start();
+                stopWatch = new Stopwatch();
+                stopWatch.Start();
+                lastUpdate = stopWatch.ElapsedMilliseconds;
             }
         }
 
@@ -52,6 +60,17 @@ namespace Asteroids.Model
             if (playerCollided())
                 gameOver();
             OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size));
+            //updateView();
+        }
+
+        private void updateView()
+        {
+            long now = stopWatch.ElapsedMilliseconds;
+            if (updateInterval < now - lastUpdate)
+            {
+                lastUpdate = now;
+                OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size));
+            }
         }
 
         private void advanceObjects()
