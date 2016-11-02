@@ -15,8 +15,8 @@
 
         public bool collidesWith(GameObject other)
         {
-            bool overlapX = overlaps(x, x + size, other.x, other.x + size);
-            bool overlapY = overlaps(y, y + size, other.y, other.y + size);
+            bool overlapX = overlaps(x, x + size, other.x, other.x + other.size);
+            bool overlapY = overlaps(y, y + size, other.y, other.y + other.size);
 
             return overlapX && overlapY;
         }

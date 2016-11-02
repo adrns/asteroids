@@ -4,7 +4,7 @@ namespace Asteroids.Model
 {
     class SpaceShip : GameObject
     {
-        private const double SIZE_RATIO = 7.5;
+        private const double SIZE_RATIO = 6.0;
         private double leftBoundary;
         private double rightBoundary;
 
@@ -14,7 +14,7 @@ namespace Asteroids.Model
             leftBoundary = 0 - size / 4;
             rightBoundary = fieldWidth - size * (3.0 / 4);
             x = (fieldWidth + size) / 2;
-            y = fieldHeight - size;
+            y = fieldHeight - size - fieldHeight / 30;
         }
 
         public void thrustLeft()

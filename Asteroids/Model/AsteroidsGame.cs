@@ -25,7 +25,7 @@ namespace Asteroids.Model
         private bool isStarted = false;
         private bool pendingLeft = false;
         private bool pendingRight = false;
-        private double chanceToSpawn;
+        private double chanceToSpawn = 1.0 / UpdateRate * 3.0;
 
         public delegate void FrameUpdateHandler(object sender, FrameEventArgs e);
         public event FrameUpdateHandler OnFrameUpdate;
@@ -59,7 +59,7 @@ namespace Asteroids.Model
             spawnObjects();
             if (playerCollided())
                 gameOver();
-            OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size));
+            OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size, asteroids));
             //updateView();
         }
 
@@ -69,7 +69,7 @@ namespace Asteroids.Model
             if (updateInterval < now - lastUpdate)
             {
                 lastUpdate = now;
-                OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size));
+                OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size, asteroids));
             }
         }
 
@@ -83,7 +83,11 @@ namespace Asteroids.Model
 
         private void spawnObjects()
         {
-
+            if (random.NextDouble() < chanceToSpawn)
+            {
+                Console.WriteLine("Spawned an asteroid");
+                asteroids.Add(new Asteroid(width, height));
+            }
         }
 
         private void acceleratePlayer()
@@ -111,6 +115,7 @@ namespace Asteroids.Model
 
         private void gameOver()
         {
+            Console.WriteLine("Game over");
             timer.Stop();
         }
 

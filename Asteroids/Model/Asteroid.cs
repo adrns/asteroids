@@ -6,16 +6,16 @@ namespace Asteroids.Model
     {
         private static Random random = new Random();
         private const double MIN_SECONDS_VISIBLE = 3.0;
-        private const double MAX_SECONDS_VISIBLE = 7.0;
-        private const double MIN_SIZE_RATIO = 10.0;
-        private const double MAX_SIZE_RATIO = 5.0;
+        private const double MAX_SECONDS_VISIBLE = 15.0;
+        private const double MIN_SIZE_RATIO = 15.0;
+        private const double MAX_SIZE_RATIO = 7.0;
         
-        public Asteroid(double fieldWidth, double fieldHeight, double maxY)
+        public Asteroid(double fieldWidth, double fieldHeight)
         {
             size = calculateSize(fieldWidth);
             velocity = calculateVelocity(fieldHeight);
             x = random.NextDouble() * (fieldWidth - size);
-            y = random.NextDouble() * maxY + size;
+            y = -size;
         }
 
         private double calculateSize(double fieldWidth)

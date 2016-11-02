@@ -1,4 +1,6 @@
 ﻿using Asteroids.Model;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -13,6 +15,14 @@ namespace Asteroids
         private AsteroidsGame game;
         private int FPS = 120;
         private long counter = 0;
+        private List<Asteroid> asteroids;
+
+        private Image background;
+        private Image spaceShip;
+        private Image asteroidImage;
+
+        private Rectangle cropRectangle;
+        private Rectangle displayRectangle;
 
         private float playerX;
         private float playerY;
@@ -28,6 +38,12 @@ namespace Asteroids
             game.start();
             KeyDown += GameForm_KeyDown;
             Paint += Canvas_Paint;
+            background = Bitmap.FromFile("C:\\background.png");
+            spaceShip = Bitmap.FromFile("C:\\spaceship.png");
+            asteroidImage = Bitmap.FromFile("C:\\asteroid.png");
+            displayRectangle = new Rectangle(0, 0, Width, Height);
+            Random random = new Random();
+            cropRectangle = new Rectangle(0, 0, Width, Height);
         }
 
         private void GameForm_KeyDown(object sender, KeyEventArgs e)
@@ -45,6 +61,7 @@ namespace Asteroids
             playerX = (float) e.PlayerX;
             playerY = (float) e.PlayerY;
             playerSize = (float) e.PlayerSize;
+            asteroids = e.Asteroids;
             counter++;
             Invalidate();
         }
@@ -58,8 +75,18 @@ namespace Asteroids
             graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
             graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
 
+            if (null != background)
+                graphics.DrawImage(background, displayRectangle, cropRectangle, GraphicsUnit.Pixel);
+
+            if (null != asteroids && null != asteroidImage)
+                foreach (Asteroid asteroid in asteroids)
+                    graphics.DrawImage(asteroidImage, new Rectangle((int) asteroid.X, (int) asteroid.Y, (int) asteroid.Size, (int) asteroid.Size));
+                    //graphics.FillRectangle(Brushes.Blue, (float)asteroid.X, (float)asteroid.Y, (float)asteroid.Size, (float)asteroid.Size);
+
             //graphics.DrawString("counter " + counter, font, Brushes.Black, playerX, playerY);
-            graphics.FillRectangle(Brushes.Red, playerX, playerY, playerSize, playerSize);
+            if (null != spaceShip)
+                graphics.DrawImage(spaceShip, new Rectangle((int) playerX, (int) playerY, (int) playerSize, (int) playerSize));
+            //graphics.FillRectangle(Brushes.Red, playerX, playerY, playerSize, playerSize);
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)
