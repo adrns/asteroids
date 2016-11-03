@@ -53,6 +53,21 @@ namespace Asteroids.Model
             }
         }
 
+        public void resume()
+        {
+            if (isStarted) timer.Stop();
+        }
+
+        public void pause()
+        {
+            if (isStarted) timer.Start();
+        }
+
+        public bool isPaused()
+        {
+            return timer.Enabled;
+        }
+
         private void gameLoop(object sender, ElapsedEventArgs e)
         {
             advanceObjects();

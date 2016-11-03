@@ -4,7 +4,7 @@ namespace Asteroids.Model
 {
     class SpaceShip : GameObject
     {
-        private const double SIZE_RATIO = 6.0;
+        private const double SIZE_RATIO = 8.0;
         private double leftBoundary;
         private double rightBoundary;
 
@@ -58,7 +58,7 @@ namespace Asteroids.Model
             }
             else if (speed > 0)
             {
-                velocity -= Math.Sqrt(speed) * 1/16 * Math.Sign(velocity);
+                velocity -= Math.Sqrt(speed) * 1/24 * Math.Sign(velocity);
             }
         }
     }

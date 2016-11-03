@@ -71,6 +71,7 @@ namespace Asteroids
                 case Keys.Escape: Close(); break;
                 case Keys.Left: game.leftReleased(); break;
                 case Keys.Right: game.rightReleased(); break;
+                case Keys.Space: if (game.isPaused()) game.resume(); else game.pause(); break;
             }
         }
 
