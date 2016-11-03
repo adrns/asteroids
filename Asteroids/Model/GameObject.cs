@@ -1,5 +1,6 @@
 ﻿namespace Asteroids.Model
 {
+    //TODO check for overlapping circles instead
     abstract class GameObject
     {
         protected double size;
