@@ -29,7 +29,12 @@ namespace Asteroids.Model
 
         private void thrust(bool left)
         {
-            velocity += left ? -1.5 : 1.5; //TODO implement acceleration
+            double speed = Math.Abs(velocity);
+            if (speed < 10.0)
+            {
+                double increase = 0.25 > speed ? 1.5 : Math.Sqrt(0.125 * speed);
+                velocity += left ? -increase : increase;
+            }
         }
 
         public override void advance()
@@ -41,17 +46,19 @@ namespace Asteroids.Model
 
         private void bounceBack()
         {
-            if (velocity < 0 && x < leftBoundary || rightBoundary < x && velocity > 0)
-            {
-                velocity *= -1;
-            }
+            if (velocity < 0 && x < leftBoundary || rightBoundary < x && velocity > 0) velocity = 0;
         }
 
         private void throttle()
         {
-            if (Math.Abs(velocity) > 0.0)
+            double speed = Math.Abs(velocity);
+            if (speed < 0.5)
             {
-                velocity = velocity - 0.25 * Math.Sign(velocity);
+                velocity = 0;
+            }
+            else if (speed > 0)
+            {
+                velocity -= Math.Sqrt(speed) * 1/16 * Math.Sign(velocity);
             }
         }
     }

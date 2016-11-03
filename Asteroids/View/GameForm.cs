@@ -1,5 +1,4 @@
 ﻿using Asteroids.Model;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -10,59 +9,75 @@ namespace Asteroids
 {
     public partial class GameForm : Form
     {
+        private AsteroidsGame game;
         private Brush brush;
         private Font font;
-        private AsteroidsGame game;
-        private int FPS = 120;
-        private long counter = 0;
-        private List<Asteroid> asteroids;
-
         private Image background;
         private Image spaceShip;
         private Image asteroidImage;
-
         private Rectangle cropRectangle;
         private Rectangle displayRectangle;
+        private List<Asteroid> asteroids;
+        private SpaceShip player;
 
-        private float playerX;
-        private float playerY;
-        private float playerSize;
+        private int FPS = 120;
 
         public GameForm()
         {
             InitializeComponent();
+            LoadResources();
+            SetupDrawObjects();
+            InitializeAndStartGame();
+        }
+
+        private void LoadResources()
+        {
+            background = Properties.Resources.space;
+            spaceShip = Properties.Resources.spaceship;
+            asteroidImage = Properties.Resources.asteroid;
+        }
+
+        private void SetupDrawObjects()
+        {
             brush = new SolidBrush(Color.AliceBlue);
             font = new Font("Courier New", 18);
+            displayRectangle = new Rectangle(0, 0, Width, Height);
+            cropRectangle = new Rectangle(0, 0, Width, Height);
+        }
+
+        private void InitializeAndStartGame()
+        {
             game = new AsteroidsGame(Width, Height, FPS);
             game.OnFrameUpdate += new AsteroidsGame.FrameUpdateHandler(handler);
             game.start();
             KeyDown += GameForm_KeyDown;
+            KeyUp += GameForm_KeyUp;
             Paint += Canvas_Paint;
-            background = Bitmap.FromFile("C:\\background.png");
-            spaceShip = Bitmap.FromFile("C:\\spaceship.png");
-            asteroidImage = Bitmap.FromFile("C:\\asteroid.png");
-            displayRectangle = new Rectangle(0, 0, Width, Height);
-            Random random = new Random();
-            cropRectangle = new Rectangle(0, 0, Width, Height);
         }
 
         private void GameForm_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
+                case Keys.Left: game.leftPressed(); break;
+                case Keys.Right: game.rightPressed(); break;
+            }
+        }
+
+        private void GameForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
                 case Keys.Escape: Close(); break;
-                case Keys.Left: game.moveLeft(); break;
-                case Keys.Right: game.moveRight(); break;
+                case Keys.Left: game.leftReleased(); break;
+                case Keys.Right: game.rightReleased(); break;
             }
         }
 
         private void handler(object sender, FrameEventArgs e)
         {
-            playerX = (float) e.PlayerX;
-            playerY = (float) e.PlayerY;
-            playerSize = (float) e.PlayerSize;
+            player = e.Player;
             asteroids = e.Asteroids;
-            counter++;
             Invalidate();
         }
 
@@ -84,8 +99,8 @@ namespace Asteroids
                     //graphics.FillRectangle(Brushes.Blue, (float)asteroid.X, (float)asteroid.Y, (float)asteroid.Size, (float)asteroid.Size);
 
             //graphics.DrawString("counter " + counter, font, Brushes.Black, playerX, playerY);
-            if (null != spaceShip)
-                graphics.DrawImage(spaceShip, new Rectangle((int) playerX, (int) playerY, (int) playerSize, (int) playerSize));
+            if (null != spaceShip && null != player)
+                graphics.DrawImage(spaceShip, new Rectangle((int) player.X, (int) player.Y, (int) player.Size, (int) player.Size));
             //graphics.FillRectangle(Brushes.Red, playerX, playerY, playerSize, playerSize);
         }
 
@@ -93,6 +108,5 @@ namespace Asteroids
         {
             //disable
         }
-
     }
 }

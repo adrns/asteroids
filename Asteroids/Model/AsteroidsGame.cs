@@ -23,9 +23,9 @@ namespace Asteroids.Model
         private int updateInterval;
         private long lastUpdate;
         private bool isStarted = false;
-        private bool pendingLeft = false;
-        private bool pendingRight = false;
-        private double chanceToSpawn = 1.0 / UpdateRate * 3.0;
+        private bool movingLeft = false;
+        private bool movingRight = false;
+        private double chanceToSpawn = 1.0 / UpdateRate * 1.5;
 
         public delegate void FrameUpdateHandler(object sender, FrameEventArgs e);
         public event FrameUpdateHandler OnFrameUpdate;
@@ -59,7 +59,7 @@ namespace Asteroids.Model
             spawnObjects();
             if (playerCollided())
                 gameOver();
-            OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size, asteroids));
+            OnFrameUpdate(this, new FrameEventArgs(player, asteroids));
             //updateView();
         }
 
@@ -69,7 +69,7 @@ namespace Asteroids.Model
             if (updateInterval < now - lastUpdate)
             {
                 lastUpdate = now;
-                OnFrameUpdate(this, new FrameEventArgs(player.X, player.Y, player.Size, asteroids));
+                OnFrameUpdate(this, new FrameEventArgs(player, asteroids));
             }
         }
 
@@ -92,16 +92,8 @@ namespace Asteroids.Model
 
         private void acceleratePlayer()
         {
-            if (pendingLeft)
-            {
-                player.thrustLeft();
-                pendingLeft = false;
-            }
-            if (pendingRight)
-            {
-                player.thrustRight();
-                pendingRight = false;
-            }
+            if (movingLeft) player.thrustLeft();
+            if (movingRight) player.thrustRight();
         }
 
         private bool playerCollided()
@@ -119,14 +111,24 @@ namespace Asteroids.Model
             timer.Stop();
         }
 
-        public void moveLeft()
+        public void leftPressed()
         {
-            pendingLeft = true;
+            movingLeft = true;
         }
 
-        public void moveRight()
+        public void rightPressed()
         {
-            pendingRight = true;
+            movingRight = true;
+        }
+
+        public void leftReleased()
+        {
+            movingLeft = false;
+        }
+
+        public void rightReleased()
+        {
+            movingRight = false;
         }
     }
 }
