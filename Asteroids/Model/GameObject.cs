@@ -1,6 +1,7 @@
-﻿namespace Asteroids.Model
+﻿using System;
+
+namespace Asteroids.Model
 {
-    //TODO check for overlapping circles instead
     abstract class GameObject
     {
         protected double size;
@@ -16,20 +17,10 @@
 
         public bool collidesWith(GameObject other)
         {
-            bool overlapX = overlaps(x, x + size, other.x, other.x + other.size);
-            bool overlapY = overlaps(y, y + size, other.y, other.y + other.size);
-
-            return overlapX && overlapY;
-        }
-
-        protected bool overlaps(double aStart, double aEnd, double bStart, double bEnd)
-        {
-            return isBetween(bStart, aStart, aEnd) || isBetween(bEnd, aStart, aEnd);
-        }
-
-        protected bool isBetween(double point, double start, double end)
-        {
-            return start <= point && point <= end;
+            double distance = Math.Sqrt(
+                Math.Pow((x + size / 2.0) - (other.x + other.size / 2.0), 2) +
+                Math.Pow((y + size / 2.0) - (other.y + other.size / 2.0), 2));
+            return distance <= size / 2 + other.size / 2;
         }
     }
 }
