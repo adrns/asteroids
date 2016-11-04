@@ -25,6 +25,8 @@ namespace Asteroids.Model
         private bool isStarted = false;
         private bool movingLeft = false;
         private bool movingRight = false;
+        private bool movingUp = false;
+        private bool movingDown = false;
         private double chanceToSpawn = 1.0 / UpdateRate * 1.5;
 
         public delegate void FrameUpdateHandler(object sender, FrameEventArgs e);
@@ -109,6 +111,8 @@ namespace Asteroids.Model
         {
             if (movingLeft) player.thrustLeft();
             if (movingRight) player.thrustRight();
+            if (movingUp) player.thrustUp();
+            if (movingDown) player.thrustDown();
         }
 
         private bool playerCollided()
@@ -144,6 +148,26 @@ namespace Asteroids.Model
         public void rightReleased()
         {
             movingRight = false;
+        }
+
+        public void upPressed()
+        {
+            movingUp = true;
+        }
+
+        public void downPressed()
+        {
+            movingDown = true;
+        }
+
+        public void upReleased()
+        {
+            movingUp = false;
+        }
+
+        public void downReleased()
+        {
+            movingDown = false;
         }
     }
 }

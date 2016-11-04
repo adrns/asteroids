@@ -59,8 +59,10 @@ namespace Asteroids
         {
             switch (e.KeyCode)
             {
-                case Keys.Left: game.leftPressed(); break;
-                case Keys.Right: game.rightPressed(); break;
+                case Keys.A: case Keys.Left: game.leftPressed(); break;
+                case Keys.D: case Keys.Right: game.rightPressed(); break;
+                case Keys.W: case Keys.Up: game.upPressed(); break;
+                case Keys.S: case Keys.Down: game.downPressed(); break;
             }
         }
 
@@ -69,8 +71,10 @@ namespace Asteroids
             switch (e.KeyCode)
             {
                 case Keys.Escape: Close(); break;
-                case Keys.Left: game.leftReleased(); break;
-                case Keys.Right: game.rightReleased(); break;
+                case Keys.A: case Keys.Left: game.leftReleased(); break;
+                case Keys.D: case Keys.Right: game.rightReleased(); break;
+                case Keys.W: case Keys.Up: game.upReleased(); break;
+                case Keys.S: case Keys.Down: game.downReleased(); break;
                 case Keys.Space: if (game.isPaused()) game.resume(); else game.pause(); break;
             }
         }
@@ -101,7 +105,9 @@ namespace Asteroids
 
             //graphics.DrawString("counter " + counter, font, Brushes.Black, playerX, playerY);
             if (null != spaceShip && null != player)
-                graphics.DrawImage(spaceShip, new Rectangle((int) player.X, (int) player.Y, (int) player.Size, (int) player.Size));
+            {
+                graphics.DrawImage(spaceShip, new Rectangle((int)player.X, (int)player.Y, (int)player.Size, (int)player.Size));
+            }
             //graphics.FillRectangle(Brushes.Red, playerX, playerY, playerSize, playerSize);
         }
 

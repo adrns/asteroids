@@ -7,6 +7,7 @@ namespace Asteroids.Model
         private const double SIZE_RATIO = 8.0;
         private double leftBoundary;
         private double rightBoundary;
+        private double velocityY;
 
         public SpaceShip(double fieldWidth, double fieldHeight)
         {
@@ -19,21 +20,41 @@ namespace Asteroids.Model
 
         public void thrustLeft()
         {
-            thrust(true);
+            thrustX(true);
         }
 
         public void thrustRight()
         {
-            thrust(false);
+            thrustX(false);
         }
 
-        private void thrust(bool left)
+        public void thrustUp()
+        {
+            thrustY(true);
+        }
+
+        public void thrustDown()
+        {
+            thrustY(false);
+        }
+
+        private void thrustX(bool left)
         {
             double speed = Math.Abs(velocity);
-            if (speed < 10.0)
+            if (speed < 7.5)
             {
-                double increase = 0.25 > speed ? 1.5 : Math.Sqrt(0.125 * speed);
+                double increase = 0.25 > speed ? 0.5 : Math.Sqrt(0.05 * speed);
                 velocity += left ? -increase : increase;
+            }
+        }
+
+        private void thrustY(bool up)
+        {
+            double speed = Math.Abs(velocityY);
+            if (speed < 7.5)
+            {
+                double increase = 0.25 > speed ? 0.5 : Math.Sqrt(0.05 * speed);
+                velocityY += up ? -increase : increase;
             }
         }
 
@@ -41,7 +62,9 @@ namespace Asteroids.Model
         {
             bounceBack();
             x += velocity;
+            y += velocityY;
             throttle();
+            throttleY();
         }
 
         private void bounceBack()
@@ -59,6 +82,19 @@ namespace Asteroids.Model
             else if (speed > 0)
             {
                 velocity -= Math.Sqrt(speed) * 1/24 * Math.Sign(velocity);
+            }
+        }
+
+        private void throttleY()
+        {
+            double speed = Math.Abs(velocityY);
+            if (speed < 0.5)
+            {
+                velocityY = 0;
+            }
+            else if (speed > 0)
+            {
+                velocityY -= Math.Sqrt(speed) * 1 / 24 * Math.Sign(velocityY);
             }
         }
     }
