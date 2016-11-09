@@ -37,7 +37,7 @@ namespace Asteroids.Model
             this.width = width;
             this.height = height;
             this.fps = fps;
-            updateInterval = 1000 / fps;
+            updateInterval = 0 == fps ? 0 : 1000 / fps;
         }
 
         public void start()
@@ -57,17 +57,17 @@ namespace Asteroids.Model
 
         public void resume()
         {
-            if (isStarted) timer.Stop();
+            if (isStarted) timer.Start();
         }
 
         public void pause()
         {
-            if (isStarted) timer.Start();
+            if (isStarted) timer.Stop();
         }
 
         public bool isPaused()
         {
-            return timer.Enabled;
+            return !timer.Enabled;
         }
 
         private void gameLoop(object sender, ElapsedEventArgs e)
@@ -76,8 +76,7 @@ namespace Asteroids.Model
             spawnObjects();
             if (playerCollided())
                 gameOver();
-            OnFrameUpdate(this, new FrameEventArgs(player, asteroids));
-            //updateView();
+            updateView();
         }
 
         private void updateView()

@@ -9,9 +9,11 @@ namespace Asteroids
 {
     public partial class GameForm : Form
     {
+        private const string PAUSE = "Paused";
         private AsteroidsGame game;
-        private Brush brush;
-        private Font font;
+        private Brush transparentBrush;
+        private Brush pausedFontBrush;
+        private Font pausedFont;
         private Image background;
         private Image spaceShip;
         private Image asteroidImage;
@@ -20,7 +22,7 @@ namespace Asteroids
         private List<Asteroid> asteroids;
         private SpaceShip player;
 
-        private int FPS = 120;
+        private int FPS = 0;
 
         public GameForm()
         {
@@ -39,8 +41,9 @@ namespace Asteroids
 
         private void SetupDrawObjects()
         {
-            brush = new SolidBrush(Color.AliceBlue);
-            font = new Font("Courier New", 18);
+            transparentBrush = new SolidBrush(Color.FromArgb(128, 0, 0, 32));
+            pausedFont = new Font("Segoe UI", 32, FontStyle.Bold);
+            pausedFontBrush = new SolidBrush(Color.FromArgb(160, 255, 255, 255));
             displayRectangle = new Rectangle(0, 0, Width, Height);
             cropRectangle = new Rectangle(0, 0, Width, Height);
         }
@@ -75,7 +78,7 @@ namespace Asteroids
                 case Keys.D: case Keys.Right: game.rightReleased(); break;
                 case Keys.W: case Keys.Up: game.upReleased(); break;
                 case Keys.S: case Keys.Down: game.downReleased(); break;
-                case Keys.Space: if (game.isPaused()) game.resume(); else game.pause(); break;
+                case Keys.Space: if (game.isPaused()) game.resume(); else game.pause(); Invalidate(); break;
             }
         }
 
@@ -107,6 +110,13 @@ namespace Asteroids
             if (null != spaceShip && null != player)
             {
                 graphics.DrawImage(spaceShip, new Rectangle((int)player.X, (int)player.Y, (int)player.Size, (int)player.Size));
+            }
+
+            if (game.isPaused())
+            {
+                SizeF fontSize = graphics.MeasureString(PAUSE, pausedFont);
+                graphics.FillRectangle(transparentBrush, 0, 0, Width, Height);
+                graphics.DrawString(PAUSE, pausedFont, pausedFontBrush, Width / 2 - fontSize.Width / 2, Height / 2 - fontSize.Height / 2);
             }
             //graphics.FillRectangle(Brushes.Red, playerX, playerY, playerSize, playerSize);
         }
