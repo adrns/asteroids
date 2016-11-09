@@ -17,7 +17,7 @@ namespace Asteroids.Model
             leftBoundary = topBoundary = 0 - size / 4;
             rightBoundary = fieldWidth - size * (3.0 / 4);
             bottomBoundary = fieldHeight - size * (3.0 / 4);
-            x = (fieldWidth + size) / 2;
+            x = fieldWidth / 2 - size / 2;
             y = fieldHeight - size - fieldHeight / 30;
         }
 

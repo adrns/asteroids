@@ -21,6 +21,7 @@ namespace Asteroids.Model
         private int updateInterval;
         private long lastUpdate;
         private bool isStarted = false;
+        private bool isOver = false;
         private bool movingLeft = false;
         private bool movingRight = false;
         private bool movingUp = false;
@@ -36,26 +37,28 @@ namespace Asteroids.Model
             this.height = height;
             this.fps = fps;
             updateInterval = 0 == fps ? 0 : 1000 / fps;
+            timer = new Timer(speedMs);
+            timer.Elapsed += gameLoop;
+            stopWatch = new Stopwatch();
         }
 
         public void start()
         {
-            if (!isStarted)
+            if (!isStarted || isOver)
             {
-                player = new SpaceShip(width, height);
+                isOver = false;
                 isStarted = true;
-                timer = new Timer(speedMs);
-                timer.Elapsed += gameLoop;
+                asteroids.Clear();
+                player = new SpaceShip(width, height);
                 timer.Start();
-                stopWatch = new Stopwatch();
-                stopWatch.Start();
+                stopWatch.Restart();
                 lastUpdate = stopWatch.ElapsedMilliseconds;
             }
         }
 
         public void resume()
         {
-            if (isStarted)
+            if (isStarted && !isOver)
             {
                 timer.Start();
                 stopWatch.Start();
@@ -64,17 +67,14 @@ namespace Asteroids.Model
 
         public void pause()
         {
-            if (isStarted)
+            if (isStarted && !isOver)
             {
                 timer.Stop();
                 stopWatch.Stop();
             }
         }
 
-        public bool isPaused()
-        {
-            return !timer.Enabled;
-        }
+        public bool Paused { get { return !timer.Enabled; } }
 
         private void gameLoop(object sender, ElapsedEventArgs e)
         {
@@ -133,10 +133,15 @@ namespace Asteroids.Model
             return false;
         }
 
+        public bool Started { get { return isStarted; } }
+
+        public bool GameOver { get { return isOver; } }
+
         private void gameOver()
         {
-            Console.WriteLine("Game over");
             timer.Stop();
+            stopWatch.Stop();
+            isOver = true;
         }
 
         public void leftPressed()
