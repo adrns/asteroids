@@ -7,13 +7,16 @@ namespace Asteroids.Model
         private const double SIZE_RATIO = 8.0;
         private double leftBoundary;
         private double rightBoundary;
+        private double topBoundary;
+        private double bottomBoundary;
         private double velocityY;
 
         public SpaceShip(double fieldWidth, double fieldHeight)
         {
             size = fieldWidth / SIZE_RATIO;
-            leftBoundary = 0 - size / 4;
+            leftBoundary = topBoundary = 0 - size / 4;
             rightBoundary = fieldWidth - size * (3.0 / 4);
+            bottomBoundary = fieldHeight - size * (3.0 / 4);
             x = (fieldWidth + size) / 2;
             y = fieldHeight - size - fieldHeight / 30;
         }
@@ -70,6 +73,7 @@ namespace Asteroids.Model
         private void bounceBack()
         {
             if (velocity < 0 && x < leftBoundary || rightBoundary < x && velocity > 0) velocity = 0;
+            if (velocityY < 0 && y < topBoundary || bottomBoundary < y && velocityY > 0) velocityY = 0;
         }
 
         private void throttle()
