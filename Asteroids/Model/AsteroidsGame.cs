@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Asteroids.Model
 {
-    class AsteroidsGame
+    public class AsteroidsGame
     {
         private const int speedMs = 5;
         public const int UpdateRate = 1000 / speedMs;

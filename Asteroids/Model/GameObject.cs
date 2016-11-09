@@ -2,7 +2,7 @@
 
 namespace Asteroids.Model
 {
-    abstract class GameObject
+    public abstract class GameObject
     {
         protected double size;
         protected double velocity;

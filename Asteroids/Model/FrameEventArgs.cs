@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Asteroids.Model
 {
-    class FrameEventArgs : EventArgs
+    public class FrameEventArgs : EventArgs
     {
         public SpaceShip Player { get; private set; }
         public List<Asteroid> Asteroids { get; private set; }

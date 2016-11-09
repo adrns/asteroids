@@ -2,11 +2,11 @@
 
 namespace Asteroids.Model
 {
-    class Asteroid : GameObject
+    public class Asteroid : GameObject
     {
         private static Random random = new Random();
-        private const double MIN_SECONDS_VISIBLE = 3.0;
-        private const double MAX_SECONDS_VISIBLE = 15.0;
+        public const double MIN_SECONDS_VISIBLE = 3.0;
+        public const double MAX_SECONDS_VISIBLE = 15.0;
         private const double MIN_SIZE_RATIO = 15.0;
         private const double MAX_SIZE_RATIO = 7.0;
         

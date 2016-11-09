@@ -2,7 +2,7 @@
 
 namespace Asteroids.Model
 {
-    class SpaceShip : GameObject
+    public class SpaceShip : GameObject
     {
         private const double SIZE_RATIO = 8.0;
         private double leftBoundary;
