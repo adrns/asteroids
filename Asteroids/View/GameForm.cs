@@ -4,9 +4,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Forms;
-using System;
 
-namespace Asteroids
+namespace Asteroids.View
 {
     public partial class GameForm : Form
     {

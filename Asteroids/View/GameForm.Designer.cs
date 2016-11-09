@@ -1,4 +1,4 @@
-﻿namespace Asteroids
+﻿namespace Asteroids.View
 {
     partial class GameForm
     {
