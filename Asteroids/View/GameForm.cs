@@ -14,6 +14,8 @@ namespace Asteroids
         private Brush transparentBrush;
         private Brush pausedFontBrush;
         private Font pausedFont;
+        private Brush timeFontBrush;
+        private Font timeFont;
         private Image background;
         private Image spaceShip;
         private Image asteroidImage;
@@ -21,6 +23,7 @@ namespace Asteroids
         private Rectangle displayRectangle;
         private List<Asteroid> asteroids;
         private SpaceShip player;
+        private long elapsedSeconds;
 
         private int FPS = 0;
 
@@ -44,6 +47,8 @@ namespace Asteroids
             transparentBrush = new SolidBrush(Color.FromArgb(128, 0, 0, 32));
             pausedFont = new Font("Segoe UI", 32, FontStyle.Bold);
             pausedFontBrush = new SolidBrush(Color.FromArgb(160, 255, 255, 255));
+            timeFont = new Font("Segoe UI", 96, FontStyle.Bold);
+            timeFontBrush = new SolidBrush(Color.FromArgb(128, 255, 255, 255));
             displayRectangle = new Rectangle(0, 0, Width, Height);
             cropRectangle = new Rectangle(0, 0, Width, Height);
         }
@@ -86,6 +91,7 @@ namespace Asteroids
         {
             player = e.Player;
             asteroids = e.Asteroids;
+            elapsedSeconds = e.Seconds;
             Invalidate();
         }
 
@@ -95,22 +101,23 @@ namespace Asteroids
             graphics.InterpolationMode = InterpolationMode.Low;
             graphics.CompositingQuality = CompositingQuality.HighSpeed;
             graphics.SmoothingMode = SmoothingMode.HighSpeed;
-            graphics.TextRenderingHint = TextRenderingHint.SystemDefault;
+            graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
             graphics.PixelOffsetMode = PixelOffsetMode.HighSpeed;
 
             if (null != background)
                 graphics.DrawImage(background, displayRectangle, cropRectangle, GraphicsUnit.Pixel);
 
+            string elapsed = formattedTime();
+            SizeF timeFontSize = graphics.MeasureString(elapsed, timeFont);
+            graphics.DrawString(elapsed, timeFont, timeFontBrush, Width / 2 - timeFontSize.Width / 2, Height / 5 - timeFontSize.Height / 2);
+
             if (null != asteroids && null != asteroidImage)
                 foreach (Asteroid asteroid in asteroids)
                     graphics.DrawImage(asteroidImage, new Rectangle((int) asteroid.X, (int) asteroid.Y, (int) asteroid.Size, (int) asteroid.Size));
-                    //graphics.FillRectangle(Brushes.Blue, (float)asteroid.X, (float)asteroid.Y, (float)asteroid.Size, (float)asteroid.Size);
 
-            //graphics.DrawString("counter " + counter, font, Brushes.Black, playerX, playerY);
+
             if (null != spaceShip && null != player)
-            {
                 graphics.DrawImage(spaceShip, new Rectangle((int)player.X, (int)player.Y, (int)player.Size, (int)player.Size));
-            }
 
             if (game.isPaused())
             {
@@ -118,7 +125,13 @@ namespace Asteroids
                 graphics.FillRectangle(transparentBrush, 0, 0, Width, Height);
                 graphics.DrawString(PAUSE, pausedFont, pausedFontBrush, Width / 2 - fontSize.Width / 2, Height / 2 - fontSize.Height / 2);
             }
-            //graphics.FillRectangle(Brushes.Red, playerX, playerY, playerSize, playerSize);
+        }
+
+        private string formattedTime()
+        {
+            long minutes = elapsedSeconds / 60;
+            long seconds = elapsedSeconds % 60;
+            return minutes.ToString().PadLeft(2, '0') + ":" + seconds.ToString().PadLeft(2, '0');
         }
 
         protected override void OnPaintBackground(PaintEventArgs e)

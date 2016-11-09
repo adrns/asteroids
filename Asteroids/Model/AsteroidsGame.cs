@@ -55,12 +55,20 @@ namespace Asteroids.Model
 
         public void resume()
         {
-            if (isStarted) timer.Start();
+            if (isStarted)
+            {
+                timer.Start();
+                stopWatch.Start();
+            }
         }
 
         public void pause()
         {
-            if (isStarted) timer.Stop();
+            if (isStarted)
+            {
+                timer.Stop();
+                stopWatch.Stop();
+            }
         }
 
         public bool isPaused()
@@ -84,7 +92,7 @@ namespace Asteroids.Model
             if (updateInterval < now - lastUpdate)
             {
                 lastUpdate = now;
-                OnFrameUpdate(this, new FrameEventArgs(player, asteroids));
+                OnFrameUpdate(this, new FrameEventArgs(player, asteroids, stopWatch.ElapsedMilliseconds / 1000L));
             }
         }
 
