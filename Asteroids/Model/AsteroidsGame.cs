@@ -5,8 +5,6 @@ using System.Diagnostics;
 
 namespace Asteroids.Model
 {
-    //TODO spawn asteroids
-    //TODO remove asteroids out of bounds
     class AsteroidsGame
     {
         private const int speedMs = 5;
@@ -72,6 +70,7 @@ namespace Asteroids.Model
 
         private void gameLoop(object sender, ElapsedEventArgs e)
         {
+            despawnObjects();
             advanceObjects();
             spawnObjects();
             if (playerCollided())
@@ -89,6 +88,11 @@ namespace Asteroids.Model
             }
         }
 
+        private void despawnObjects()
+        {
+            asteroids.RemoveAll(asteroid => asteroid.Y > height);
+        }
+
         private void advanceObjects()
         {
             acceleratePlayer();
@@ -100,10 +104,7 @@ namespace Asteroids.Model
         private void spawnObjects()
         {
             if (random.NextDouble() < chanceToSpawn)
-            {
-                Console.WriteLine("Spawned an asteroid");
                 asteroids.Add(new Asteroid(width, height));
-            }
         }
 
         private void acceleratePlayer()
