@@ -25,7 +25,7 @@ namespace Asteroids.Model
         private bool movingRight = false;
         private bool movingUp = false;
         private bool movingDown = false;
-        private double chanceToSpawn = 1.0 / UpdateRate * 1.5;
+        private double chanceToSpawn;
 
         public delegate void FrameUpdateHandler(object sender, FrameEventArgs e);
         public event FrameUpdateHandler OnFrameUpdate;
@@ -111,6 +111,7 @@ namespace Asteroids.Model
 
         private void spawnObjects()
         {
+            chanceToSpawn = (0.25 * stopWatch.ElapsedMilliseconds / 6250 + 1.25) / UpdateRate;
             if (random.NextDouble() < chanceToSpawn)
                 asteroids.Add(new Asteroid(width, height));
         }
