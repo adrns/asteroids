@@ -7,18 +7,14 @@ namespace Asteroids.Model
 {
     public class AsteroidsGame
     {
-        private const int speedMs = 5;
-        public const int UpdateRate = 1000 / speedMs;
+        private IGameRules gameRules;
         private SpaceShip player;
         private List<Asteroid> asteroids = new List<Asteroid>(20);
         private Timer timer;
         private Random random = new Random();
         private Stopwatch stopWatch;
 
-        private double width;
-        private double height;
-        private int fps;
-        private int updateInterval;
+        private int viewUpdateInterval;
         private long lastUpdate;
         private bool isStarted = false;
         private bool isOver = false;
@@ -26,18 +22,15 @@ namespace Asteroids.Model
         private bool movingRight = false;
         private bool movingUp = false;
         private bool movingDown = false;
-        private double chanceToSpawn;
 
         public delegate void FrameUpdateHandler(object sender, FrameEventArgs e);
         public event FrameUpdateHandler OnFrameUpdate;
 
-        public AsteroidsGame(double width, double height, int fps)
+        public AsteroidsGame(IGameRules gameRules, int fps)
         {
-            this.width = width;
-            this.height = height;
-            this.fps = fps;
-            updateInterval = 0 == fps ? 0 : 1000 / fps;
-            timer = new Timer(speedMs);
+            this.gameRules = gameRules;
+            viewUpdateInterval = 0 == fps ? 0 : 1000 / fps;
+            timer = new Timer(gameRules.SpeedMs);
             timer.Elapsed += gameLoop;
             stopWatch = new Stopwatch();
         }
@@ -49,7 +42,7 @@ namespace Asteroids.Model
                 isOver = false;
                 isStarted = true;
                 asteroids.Clear();
-                player = new SpaceShip(width, height);
+                player = new SpaceShip(gameRules);
                 timer.Start();
                 stopWatch.Restart();
                 lastUpdate = stopWatch.ElapsedMilliseconds;
@@ -89,7 +82,7 @@ namespace Asteroids.Model
         private void updateView()
         {
             long now = stopWatch.ElapsedMilliseconds;
-            if (updateInterval < now - lastUpdate)
+            if (viewUpdateInterval < now - lastUpdate)
             {
                 lastUpdate = now;
                 OnFrameUpdate(this, new FrameEventArgs(player, asteroids, stopWatch.ElapsedMilliseconds / 1000L));
@@ -98,7 +91,7 @@ namespace Asteroids.Model
 
         private void despawnObjects()
         {
-            asteroids.RemoveAll(asteroid => asteroid.Y > height);
+            asteroids.RemoveAll(asteroid => gameRules.isOutOfBounds(asteroid));
         }
 
         private void advanceObjects()
@@ -111,9 +104,8 @@ namespace Asteroids.Model
 
         private void spawnObjects()
         {
-            chanceToSpawn = (0.25 * stopWatch.ElapsedMilliseconds / 6250 + 1.25) / UpdateRate;
-            if (random.NextDouble() < chanceToSpawn)
-                asteroids.Add(new Asteroid(width, height));
+            if (gameRules.canSpawn(stopWatch.ElapsedMilliseconds))
+                asteroids.Add(gameRules.getNextAsteroid());
         }
 
         private void acceleratePlayer()

@@ -9,16 +9,15 @@ namespace Asteroids.Model
         private double rightBoundary;
         private double topBoundary;
         private double bottomBoundary;
-        private double velocityY;
 
-        public SpaceShip(double fieldWidth, double fieldHeight)
+        public SpaceShip(IGameRules gameRules)
         {
-            size = fieldWidth / SIZE_RATIO;
+            size = gameRules.Width / SIZE_RATIO;
             leftBoundary = topBoundary = 0 - size / 4;
-            rightBoundary = fieldWidth - size * (3.0 / 4);
-            bottomBoundary = fieldHeight - size * (3.0 / 4);
-            x = fieldWidth / 2 - size / 2;
-            y = fieldHeight - size - fieldHeight / 30;
+            rightBoundary = gameRules.Width - size * (3.0 / 4);
+            bottomBoundary = gameRules.Height - size * (3.0 / 4);
+            x = gameRules.Width / 2 - size / 2;
+            y = gameRules.Height - size - gameRules.Height / 30;
         }
 
         public void thrustLeft()
@@ -43,11 +42,11 @@ namespace Asteroids.Model
 
         private void thrustX(bool left)
         {
-            double speed = Math.Abs(velocity);
+            double speed = Math.Abs(velocityX);
             if (speed < 7.5)
             {
                 double increase = 0.25 > speed ? 0.5 : Math.Sqrt(0.05 * speed);
-                velocity += left ? -increase : increase;
+                velocityX += left ? -increase : increase;
             }
         }
 
@@ -64,28 +63,28 @@ namespace Asteroids.Model
         public override void advance()
         {
             bounceBack();
-            x += velocity;
+            x += velocityX;
             y += velocityY;
-            throttle();
+            throttleX();
             throttleY();
         }
 
         private void bounceBack()
         {
-            if (velocity < 0 && x < leftBoundary || rightBoundary < x && velocity > 0) velocity = 0;
+            if (velocityX < 0 && x < leftBoundary || rightBoundary < x && velocityX > 0) velocityX = 0;
             if (velocityY < 0 && y < topBoundary || bottomBoundary < y && velocityY > 0) velocityY = 0;
         }
 
-        private void throttle()
+        private void throttleX()
         {
-            double speed = Math.Abs(velocity);
+            double speed = Math.Abs(velocityX);
             if (speed < 0.5)
             {
-                velocity = 0;
+                velocityX = 0;
             }
             else if (speed > 0)
             {
-                velocity -= Math.Sqrt(speed) * 1/24 * Math.Sign(velocity);
+                velocityX -= Math.Sqrt(speed) * 1/24 * Math.Sign(velocityX);
             }
         }
 

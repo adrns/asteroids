@@ -64,7 +64,8 @@ namespace Asteroids.View
 
         private void InitializeAndStartGame()
         {
-            game = new AsteroidsGame(Width, Height, FPS);
+            GameRules rules = new GameRules(Width, Height);
+            game = new AsteroidsGame(rules, FPS);
             game.OnFrameUpdate += new AsteroidsGame.FrameUpdateHandler(handler);
             KeyDown += GameForm_KeyDown;
             KeyUp += GameForm_KeyUp;
