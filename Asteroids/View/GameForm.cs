@@ -36,8 +36,9 @@ namespace Asteroids.View
         private long elapsedSeconds;
         private int FPS = 0;
 
-        public GameForm()
+        public GameForm(AsteroidsGame game)
         {
+            this.game = game;
             InitializeComponent();
             LoadResources();
             SetupDrawObjects();
@@ -64,8 +65,6 @@ namespace Asteroids.View
 
         private void InitializeAndStartGame()
         {
-            GameRules rules = new GameRules(Width, Height);
-            game = new AsteroidsGame(rules, FPS);
             game.OnFrameUpdate += new AsteroidsGame.FrameUpdateHandler(handler);
             KeyDown += GameForm_KeyDown;
             KeyUp += GameForm_KeyUp;
